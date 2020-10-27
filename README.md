@@ -8,6 +8,7 @@ almost test-driven development. almost behavior-driven development. mostly `tbd`
 - simple yet powerful syntax to describe test suites.
 - reduce to the minimum possible the syntactic overhead.
 - almost flat learning curve.
+- small codebase (currently at 100 LOC).
 
 
 #### syntax.
