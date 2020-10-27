@@ -1,4 +1,5 @@
 # tbd
+
 almost test-driven development. almost behavior-driven development. mostly `tbd`.
 
 
@@ -39,4 +40,5 @@ is equivalent, like `pass` and `ignore`).
 
 - write your tests in `./testfile`.
 - run `tbd`.
+- or... run `tbd` plus the location of your test files, and call them whatever you like.
 - just chill.
