@@ -90,7 +90,7 @@ _tbd_main () {
 
     putr   \
         "" \
-        "  \e[3m${__tests__} tests executed, ${__passed_tests__} passed, ${__failed_tests__} failed.\e[0m" \
+        "  \e[3m${__tests__:-0} tests executed, ${__passed_tests__:-0} passed, ${__failed_tests__:-0} failed.\e[0m" \
         ""
 
     return ${__failed_tests__}
