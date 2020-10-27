@@ -23,7 +23,7 @@ throw () {
     kill -s TERM 0
 }
 
-good () {
+all_good () {
     ++ __passed_tests__
     putr "\e[32mpassed\e[0m."
 }
@@ -76,8 +76,8 @@ on_error () {
     esac
 
     err=$?
-    test $err = 0 && good  \
-                || throw "failed."
+    test $err = 0 && all_good  \
+                  || throw "failed."
 }
 
 _tbd_main () {
@@ -92,6 +92,8 @@ _tbd_main () {
         "" \
         "  \e[3m${__tests__} tests executed, ${__passed_tests__} passed, ${__failed_tests__} failed.\e[0m" \
         ""
+
+    return ${__failed_tests__}
 }
 
 _tbd_main "$@"
