@@ -1,0 +1,12 @@
+@ "passing tests."
+    - "false" fails
+    - "true" works
+
+
+(
+    cd examples
+    for t in *; do
+        @ "examples/$t."
+            - "tbd $t" works
+    done
+)
