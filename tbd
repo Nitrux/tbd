@@ -1,0 +1,97 @@
+#! /bin/bash
+
+
+#   make it work in bash.
+
+> /dev/null 2>&1 shopt -s expand_aliases
+
+alias quiet='> /dev/null 2>&1'
+
+alias put='printf "%s\n"'
+alias puts='printf "%b"'
+alias putr='printf "%b\n"'
+
+throw () {
+    >&2 putr "\e[31m$*\e[0m"
+
+    ++ __failed_tests__
+
+    test "$__abort_on_error__" ||
+        return $err
+
+    trap "exit $err" TERM
+    kill -s TERM 0
+}
+
+good () {
+    ++ __passed_tests__
+    putr "\e[32mpassed\e[0m."
+}
+
+on_error () {
+    case "$*" in
+        ( 'abort' )
+            __abort_on_error__="true";;
+
+        ( 'pass' | 'ignore' )
+            __abort_on_error__="";;
+
+        ( * )
+            throw "malformed instruction: on_error $*."
+    esac
+}
+
+++ () { : $(($1 = $1 + ${2:-1})); }
+
+@ () {
+    putr "${__blank}\e[34m:: ${*}\e[0m"
+    __blank="\n"
+}
+
+- () {
+    ++ __tests__
+    puts "    ${*}... "
+
+    case "$2" in
+        ( 'prints' )
+            test $# = 3 ||
+                throw "malformed test."
+
+            quiet test "$(eval "$1")" = "$3";;
+
+        ( 'fails' )
+            test $# = 2 ||
+                throw "malformed test."
+
+            ! quiet eval "$1";;
+
+        ( 'works' | 'passes' | 'succeeds' )
+            test $# = 2 ||
+                throw "malformed test."
+
+            quiet eval "$1";;
+
+        ( * )
+            throw "no such test '$2'.";;
+    esac
+
+    err=$?
+    test $err = 0 && good  \
+                || throw "failed."
+}
+
+_tbd_main () {
+    __abort_on_error__="true"
+
+    test -f "testfile" ||
+        throw "no test suite found. aborting."
+
+    source "testfile"
+
+    putr   \
+        "" \
+        "  \e[3m${__tests__} tests executed, ${__passed_tests__} passed, ${__failed_tests__} failed.\e[0m" \
+        ""
+}
+
+_tbd_main "$@"
