@@ -3,7 +3,7 @@
 almost test-driven development. almost behavior-driven development. mostly `tbd`.
 
 
-### goals.
+## goals.
 
 - have a simple tool to run tests.
 - simple, yet powerful syntax to describe test suites.
@@ -34,14 +34,14 @@ almost the whole syntax is present above (except for stuff that
 is equivalent, like `pass` and `ignore`).
 
 
-### how to.
+## how to.
 
 - write your tests in `./testfile`.
 - run `tbd`.
 - just chill.
 
 
-#### custom tests.
+### custom tests.
 
 if you need to, you can define your own testing routines. you can either
 use an external program or just define a function in the `testfile` itself.
@@ -79,7 +79,7 @@ a passing test must exit with code 0 (or `return 0` in case it's a function).
 any other exit code will be considered a failing test.
 
 
-### notes.
+## notes.
 
 - by default, `tbd` will try to read from `./testfile`, but you can
   place your tests wherever you want and pass their paths to `tbd`,
