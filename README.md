@@ -6,10 +6,8 @@ almost test-driven development. almost behavior-driven development. mostly `tbd`
 #### goals.
 
 - have a simple tool to run tests.
-- simple yet powerful syntax to describe test suites.
-- reduce to the minimum possible the syntactic overhead.
+- simple, yet powerful syntax to describe test suites.
 - almost flat learning curve.
-- small codebase (currently at 100 LOC).
 
 
 #### syntax.
