@@ -38,5 +38,18 @@ is equivalent, like `pass` and `ignore`).
 
 - write your tests in `./testfile`.
 - run `tbd`.
-- or... run `tbd` plus the location of your test files, and call them whatever you like.
 - just chill.
+
+by default, `tbd` will try to read from `./testfile`, but you can
+place your tests wherever you want and pass their paths to `tbd`,
+e.g.: `tbd my/tests/*`.
+
+by default, `tbd` will exit as soon as an error raises. you can
+override that behavior by writing `on_error continue`, `on_error pass`,
+or `on_error ignore`.
+
+both `@` and `-` are regular shell functions. `@` prints stuff,
+`-` runs a test.
+
+`-` supports these operands: `works`, `passes`, `succeeds`, `fails`,
+and `prints`. they do what you may guess.
