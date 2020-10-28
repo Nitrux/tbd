@@ -3,10 +3,5 @@
     - "true" works
 
 
-(
-    cd examples
-    for t in *; do
-        @ "examples/$t."
-            - "tbd $t" works
-    done
-)
+@ "examples/*"
+    - "tbd examples/*" works

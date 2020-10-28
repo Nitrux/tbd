@@ -1,0 +1,11 @@
+@ "test."
+    - "test ''" fails
+    - "test '.'" works
+    - "test -d /" passes
+    - "test -e ./" passes
+    - "test -e '$HOME'" passes
+    - "test 2 = 2" passes
+    - "test 2 -lt 1" fails
+    - "test 1 -le 1" passes
+    - "test 2 -gt 1" passes
+    - "test 3 -ge 1" passes
