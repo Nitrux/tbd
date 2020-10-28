@@ -1,39 +1,29 @@
 #! /bin/bash
 
 
-#   make it work in bash.
-
-> /dev/null 2>&1 shopt -s expand_aliases
+shopt -s expand_aliases
 
 alias quiet='> /dev/null 2>&1'
 
-alias put='printf "%s\n"'
 alias puts='printf "%b"'
 alias putr='printf "%b\n"'
 
 throw () {
     >&2 putr "\e[31m${*}\e[0m"
 
-    inc __failed_tests__
-
-    test "$__abort_on_error__" ||
+    test "$abort_on_error" ||
         return ${err:-1}
 
     exit ${err:-1}
 }
 
-all_good () {
-    inc __passed_tests__
-    putr "\e[32mpassed.\e[0m"
-}
-
 on_error () {
     case "$*" in
         ( 'abort' )
-            __abort_on_error__="true";;
+            abort_on_error='true';;
 
-        ( 'pass' | 'ignore' )
-            __abort_on_error__="";;
+        ( 'pass' | 'ignore' | 'continue' )
+            abort_on_error='';;
 
         ( * )
             throw "malformed instruction: on_error $*."
@@ -43,56 +33,49 @@ on_error () {
 inc () { : $(($1 = $1 + ${2:-1})); }
 
 @ () {
-    putr "${__blank}\e[34m:: ${*}\e[0m"
-    __blank="\n"
+    putr "${new_ln}\e[34m:: ${*}\e[0m"
+    new_ln="\n"
 }
 
 - () {
-    inc __tests__
+    inc tests
     puts "    ${*}... "
 
     case "$2" in
         ( 'prints' )
-            test $# = 3 ||
-                throw "malformed test."
-
+            test $# = 3 || throw "malformed test."
             quiet test "$(eval "$1")" = "$3";;
 
         ( 'fails' )
-            test $# = 2 ||
-                throw "malformed test."
-
+            test $# = 2 || throw "malformed test."
             ! quiet eval "$1";;
 
         ( 'works' | 'passes' | 'succeeds' )
-            test $# = 2 ||
-                throw "malformed test."
-
+            test $# = 2 || throw "malformed test."
             quiet eval "$1";;
 
         ( * )
-            throw "no such test '$2'.";;
+            quiet command -V "$2" || throw "no such test '$2'."
+            quiet "$2" "$@";;
     esac
 
     err=$?
-    test $err = 0 && all_good  \
-                  || throw "failed."
+    test $err = 0 && { inc passed_tests; putr "\e[32mpassed.\e[0m"; } \
+                  || { inc failed_tests; throw "failed!"; }
 }
 
-_tbd_main () {
-    __abort_on_error__="true"
+tbd_main () {
+    abort_on_error="true"
+
+    trap 'putr "" "  \e[3m${tests:-0} tests executed, ${passed_tests:-0} passed, ${failed_tests:-0} failed.\e[0m" ""' \
+        INT EXIT TERM
 
     for tf in "${@:-testfile}"; do
-        test -f "$tf" || throw "'$tf' is not a file. aborting."
-        source "$tf"
+        test -f "$tf" && source "$tf" \
+                      || throw "'$tf' is not a file. aborting."
     done
 
-    putr   \
-        "" \
-        "  \e[3m${__tests__:-0} tests executed, ${__passed_tests__:-0} passed, ${__failed_tests__:-0} failed.\e[0m" \
-        ""
-
-    return ${__abort_on_error__:+${__failed_tests__}}
+    return ${abort_on_error:+${failed_tests}}
 }
 
-_tbd_main "$@"
+tbd_main "$@"

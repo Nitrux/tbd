@@ -3,5 +3,15 @@
     - "true" works
 
 
-@ "examples/*"
+@ "test all in examples/."
     - "tbd examples/*" works
+
+
+@ "run custom tests."
+
+    creates () {
+        eval "$1"
+        test -f "$3"
+    }
+
+    - "touch my-file" creates "my-file"
