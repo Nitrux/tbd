@@ -3,14 +3,14 @@
 almost test-driven development. almost behavior-driven development. mostly `tbd`.
 
 
-#### goals.
+### goals.
 
 - have a simple tool to run tests.
 - simple, yet powerful syntax to describe test suites.
 - almost flat learning curve.
 
 
-#### syntax.
+### syntax.
 
 ```shell
 #   you tell tbd what will happen.
@@ -34,7 +34,7 @@ almost the whole syntax is present above (except for stuff that
 is equivalent, like `pass` and `ignore`).
 
 
-#### how to.
+### how to.
 
 - write your tests in `./testfile`.
 - run `tbd`.
@@ -70,11 +70,16 @@ removes () {
     - "rm f" removes "f"
 ```
 
+`-` will forward __all__ the arguments it received to the test. from the
+above example, `creates` will receive the following arguments: `touch f`,
+`creates` and `f`. it's up to the implementer how to handle the arguments
+forwarded.
+
 a passing test must exit with code 0 (or `return 0` in case it's a function).
 any other exit code will be considered a failing test.
 
 
-#### notes.
+### notes.
 
 - by default, `tbd` will try to read from `./testfile`, but you can
   place your tests wherever you want and pass their paths to `tbd`,
@@ -91,3 +96,6 @@ any other exit code will be considered a failing test.
   or `on_error ignore` into the test file. note that it will be evaluated
   when it appears, not before running the tests. to revert to the default
   behavior, use `on_error quit`, `on_error abort` or `on_error die`.
+
+- all changes are done to the current environment. if you want to avoid it,
+  run a subshell.
