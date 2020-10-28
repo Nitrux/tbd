@@ -19,7 +19,7 @@ throw () {
 
 on_error () {
     case "$*" in
-        ( 'abort' )
+        ( 'abort' | 'quit' | 'die' )
             abort_on_error='true';;
 
         ( 'pass' | 'ignore' | 'continue' )
