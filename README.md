@@ -18,7 +18,7 @@ almost test-driven development. almost behavior-driven development. mostly `tbd`
 
 on_error pass  # on error continue with the tests.
 
-@ "test my code."
+@ "test my code."  # print "test my code." to the screen.
     - "echo yes" prints "yes"
     - "echo no" prints "okay"  # fails.
 
