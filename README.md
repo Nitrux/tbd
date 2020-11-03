@@ -4,7 +4,7 @@
 
 almost test-driven development. almost behavior-driven development. mostly `tbd`.
 
-![](https://user-images.githubusercontent.com/17011090/97504684-fdb28780-193c-11eb-868b-2ce2aac9ccb2.png)
+![](https://user-images.githubusercontent.com/17011090/98034200-3b4f5e80-1ddc-11eb-91a6-337f1d1f9753.png)
 
 
 ## goals.
