@@ -30,16 +30,14 @@ on_error () {
     esac
 }
 
-inc () { : $(($1 = $1 + ${2:-1})); }
-
 @ () {
     putr "${new_ln}\e[34m${*}\e[0m"
     new_ln="\n"
 }
 
 - () {
-    inc tests
-    puts "    ${*}... "
+    : $((tests++))
+    puts "  ${*}... "
 
     case "$2" in
         ( 'prints' )
@@ -60,8 +58,8 @@ inc () { : $(($1 = $1 + ${2:-1})); }
     esac
 
     err=$?
-    test $err = 0 && { inc passed_tests; putr "\e[32mpassed.\e[0m"; } \
-                  || { inc failed_tests; throw "failed!"; }
+    test $err = 0 && { : $((passed_tests++)); putr "\e[32mpassed.\e[0m"; } \
+                  || { : $((failed_tests++)); throw "failed!"; }
 }
 
 tbd_main () {
