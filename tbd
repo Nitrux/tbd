@@ -36,7 +36,7 @@ on_error () {
 }
 
 - () {
-    : $((tests++))
+    : $(( tests++ ))
     puts "  ${*}... "
 
     case "$2" in
@@ -58,8 +58,8 @@ on_error () {
     esac
 
     err=$?
-    test $err = 0 && { : $((passed_tests++)); putr "\e[32mpassed.\e[0m"; } \
-                  || { : $((failed_tests++)); throw "failed!"; }
+    test $err = 0 && { : $(( passed_tests++ )); putr "\e[32mpassed.\e[0m"; } \
+                  || { : $(( failed_tests++ )); throw "failed!"; }
 }
 
 tbd_main () {
@@ -69,8 +69,8 @@ tbd_main () {
         INT EXIT TERM
 
     for tf in "${@:-testfile}"; do
-        test -f "$tf" && source "$tf" \
-                      || throw "'$tf' is not a file. aborting."
+        test -f "$tf" || throw "'$tf' is not a file. aborting."
+        source "$tf"
     done
 
     return ${abort_on_error:+${failed_tests}}
