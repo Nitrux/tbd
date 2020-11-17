@@ -1,3 +1,3 @@
 @ "true."
-    - "true" passes
+    - "true" works
     - "! true" fails

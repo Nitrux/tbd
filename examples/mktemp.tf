@@ -1,3 +1,3 @@
 @ "mktemp."
-    - "mktemp" passes
+    - "mktemp" works
     - "mktemp bad-template" fails

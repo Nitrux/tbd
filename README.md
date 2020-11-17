@@ -30,7 +30,7 @@ on_error pass  # on error continue with the tests.
 on_error abort  # exit on error.
 
 @ "break stuff"
-    - "false" fails  # this passes.
+    - "false" fails  # this works.
     - "true" fails   # this one fails.
 ```
 
@@ -55,8 +55,8 @@ use an external program or just define a function in the `testfile` itself.
     - action test [results]
 ```
 
-whenever `test` is not any of `works`, `passes`, `succeeds`, `fails` or
-`prints`, `-` will look for a function or command called as the test, e.g.:
+whenever `test` is not any of `works`, `fails` or `prints`, `-` will look
+for a function or command called as the test, e.g.:
 
 ```
 creates () {
@@ -89,8 +89,8 @@ any other exit code will be considered a failing test.
   place your tests wherever you want and pass their paths to `tbd`,
   e.g.: `tbd my/tests/*`.
 
-- `-` supports these operands: `works`, `passes`, `succeeds`, `fails`,
-  and `prints`. you might guess what they do.
+- `-` supports these operands: `works`, `fails`, and `prints`. you might
+  guess what they do.
 
 - both `@` and `-` are regular shell functions. `@` prints stuff,
   `-` runs a test.

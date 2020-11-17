@@ -1,3 +1,3 @@
 @ "sleep."
-    - "sleep 1" passes
+    - "sleep 1" works
     - "sleep f" fails

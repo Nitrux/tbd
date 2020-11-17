@@ -1,6 +1,6 @@
 creates () {
     eval "$1"
-    test -e "$3"
+    test -f "$3"
 }
 
 removes () {
