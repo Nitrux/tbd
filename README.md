@@ -100,6 +100,3 @@ any other exit code will be considered a failing test.
   or `on_error ignore` into the test file. note that it will be evaluated
   when it appears, not before running the tests. to revert to the default
   behavior, use `on_error quit`, `on_error abort` or `on_error die`.
-
-- all changes are done to the current environment. if you want to avoid it,
-  run a subshell.
