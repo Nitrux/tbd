@@ -2,10 +2,7 @@
 
 ![CI](https://github.com/luis-lavaire/tbd/workflows/CI/badge.svg)
 
-almost test-driven development. almost behavior-driven development. mostly `tbd`.
-
-![](https://user-images.githubusercontent.com/17011090/98034200-3b4f5e80-1ddc-11eb-91a6-337f1d1f9753.png)
-
+> _almost test-driven development; almost behavior-driven development._
 
 ## goals.
 
