@@ -8,8 +8,8 @@ alias putr='printf "%b\n"' \
 
 throw () {
     >&2 putr "\e[31m${*}\e[0m"
-    "${abort_on_error:=true}" || return ${err:-1} \
-                              && exit   ${err:-1}
+    "${abort_on_error:=true}" && exit   ${err:-1} \
+                              || return ${err:-1}
 }
 
 on_error () {
@@ -32,11 +32,11 @@ on_error () {
     case "$2" in
         ( 'works' )
             test $# = 2 || throw "malformed test."
-            (quiet eval "$1");;
+            quiet eval "$1";;
 
         ( 'fails' )
             test $# = 2 || throw "malformed test."
-            (quiet eval ! "$1");;
+            quiet eval ! "$1";;
 
         ( 'prints' )
             test $# = 3 || throw "malformed test."
