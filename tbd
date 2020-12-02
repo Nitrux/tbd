@@ -6,7 +6,7 @@ shopt -s expand_aliases
 alias putr='printf "%b\n"' \
       quiet='> /dev/null 2>&1'
 
-throw () {
+abort () {
     >&2 putr "\e[31m${*}\e[0m"
     "${abort_on_error:=true}" && exit   ${err:-1} \
                               || return ${err:-1}
@@ -21,7 +21,7 @@ on_error () {
             abort_on_error='false';;
 
         ( * )
-            throw "malformed instruction: on_error $*.";;
+            abort "malformed instruction: on_error $*.";;
     esac
 }
 
@@ -31,19 +31,19 @@ on_error () {
     printf '%s' "  $*"
     case "$2" in
         ( 'works' )
-            test $# = 2 || throw "malformed test."
+            test $# = 2 || abort "malformed test."
             quiet eval "$1";;
 
         ( 'fails' )
-            test $# = 2 || throw "malformed test."
+            test $# = 2 || abort "malformed test."
             quiet eval ! "$1";;
 
         ( 'prints' )
-            test $# = 3 || throw "malformed test."
+            test $# = 3 || abort "malformed test."
             quiet test "$(eval "$1" 2> /dev/null)" = "$3";;
 
         ( * )
-            quiet command -V "$2" || throw "no such test '$2'."
+            quiet command -V "$2" || abort "no such test '$2'."
             quiet "$2" "$@";;
     esac
 
@@ -51,7 +51,7 @@ on_error () {
 
     : $(( ++tests ))
     test $err = 0 && { : $(( ++passed_tests )); putr " \e[32mok.\e[0m"; } \
-                  || { : $(( ++failed_tests )); throw " failed!"; }
+                  || { : $(( ++failed_tests )); abort " failed!"; }
 }
 
 tbd_main () {
@@ -60,12 +60,12 @@ tbd_main () {
         EXIT TERM
 
     for tf in "${@:-testfile}"; do
-        test -r "$tf" || throw "could not read from '$tf'. aborting."
+        test -r "$tf" || abort "could not read from '$tf'. aborting."
         source "$tf"
     done
 
-    "${abort_on_error:=true}" && exit ${failed_tests}
-    exit 0
+    "${abort_on_error:=true}" && exit $failed_tests \
+                              || exit 0
 }
 
 tbd_main "$@"
