@@ -67,7 +67,7 @@ removes () {
 above example, `creates` will receive the following arguments: `>> a`,
 `creates` and `a`; `removes` will receive `rm a`, `removes` and `a`.
 
-a passing test must return 0. otherwise it will be considered a failure.
+a passing test must return `0`, otherwise it will be considered a failure.
 
 
 ## notes.
