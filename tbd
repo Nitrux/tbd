@@ -14,14 +14,10 @@ abort () {
 
 on_error () {
     case "$*" in
-        ( 'abort' | 'die' | 'quit' )
-            abort_on_error='true';;
+        ( 'quit' | 'abort' )  abort_on_error='true';;
+        ( 'continue' )        abort_on_error='false';;
 
-        ( 'pass' | 'ignore' | 'continue' )
-            abort_on_error='false';;
-
-        ( * )
-            abort "malformed instruction: on_error $*.";;
+        ( * )  abort "malformed instruction: on_error $*.";;
     esac
 }
 
