@@ -7,9 +7,9 @@
 ## goals.
 
 - simple tool to run tests.
-- simple yet powerful syntax to describe test suites.
+- simple yet powerful syntax.
 - almost flat learning curve.
-
+- works great with shell scripts.
 
 ## how to.
 
@@ -50,12 +50,12 @@ to call it, e.g.:
 ```
 creates () {
     eval "$1"
-    test -e "$3"
+    test -e "$2"
 }
 
 removes () {
     eval "$1"
-    ! test -e "$3"
+    ! test -e "$2"
 }
 
 @ "run custom tests."
@@ -63,9 +63,9 @@ removes () {
     - "rm a" removes "a"
 ```
 
-`-` will forward __all__ the arguments it received to the test. from the
-above example, `creates` will receive the following arguments: `>> a`,
-`creates` and `a`; `removes` will receive `rm a`, `removes` and `a`.
+`-` will forward to the test all the arguments it received, except for the
+second one (the command name). from the above example, `creates` will receive
+the following arguments: `>> a` and `a`; `removes` will receive `rm a` and `a`.
 
 a passing test must return `0`, otherwise it will be considered a failure.
 
