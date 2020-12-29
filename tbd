@@ -3,57 +3,53 @@
 
 shopt -s expand_aliases
 
-alias quiet='> /dev/null '      \
-      putln='printf "%b\n"'     \
-      put='printf "%b"'         \
-      run='2> "$trace_f" eval ' \
-      abort_on_error:='read __err <<<'
+alias put='printf "%b"'      \
+      putln='printf "%b\n"'  \
+      trace="2> '${e_trace:="$(mktemp)"}' " \
+      quiet="> /dev/null trace" \
+      qev='quiet eval'          \
+      abort_on_error:='read __exit <<<'
 
-r=$'\e[31m' g=$'\e[32m' i=$'\e[3m' u=$'\e[0m'
+r=$'\e[31m' g=$'\e[32m' i=$'\e[3m' n=$'\e[0m'
 
 abort () {
-    >&2 putln "\r${r}${1}${u}"
-    ${__err:=true} && { put "$i"; sed "s|^|    |" "$trace_f"; put "$u"; exit ${err:-1}; } \
-                   || return ${err:-1}
+    >&2 putln "\r${r}${1}${n}"
+    ${__exit:=true} && { put "$i"; sed "s|^|    |" "$e_trace"; put "$u"; exit ${err:-1}; } \
+                    || return ${err:-1}
 }
 
 ++ () { : $(( ++$1 )); }
 
-@ () { putln "${new_ln}\e[33m${*}\e[0m"; new_ln="\n"; }
+@ () { putln "${new_ln}\e[33m${*}${n}"; new_ln="\n"; }
 
 - () {
     put "       $*"
 
     case "$2" in
-        ( 'works' )   quiet run "$1";;
-        ( 'fails' )   quiet run ! "$1";;
-        ( 'prints' )  quiet test "$(run "$1")" = "$3";;
+        ( 'works' )   qev "$1";;
+        ( 'fails' )   qev ! "$1";;
+        ( 'prints' )  test "$(trace eval "$1")" = "$3";;
 
-        ( * )
-            quiet command -V "$2" || abort "no such command '$2'."
-            quiet run "$2" "$1" "${@:3}";;
+        ( * )  quiet "$2" "$1" "${@:3}";;
     esac
 
     _c=$?; ++ tests
 
-    test $_c = 0 && { ++ good; putln "\r   ${g}ok${u}"; } \
+    test $_c = 0 && { ++ good; putln "\r   ${g}ok${n}"; } \
                  || { ++ fail; abort " fail"; }
 }
 
 tbd_main () {
-    trap 'rm "$trace_f"; exit' INT
-    trap 'rm "$trace_f"; putln "" "  \e[3m${tests:-0} tests executed, ${good:-0} passed, ${fail:-0} failed.\e[0m"' \
+    trap 'rm "$e_trace"; putln "" "  ${i}${tests:-0} tests executed, ${good:-0} passed, ${fail:-0} failed.${n}"' \
         EXIT
 
-    trace_f="$(mktemp)"
-
     for tf in "${@:-testfile}"; do
-        test -r "$tf" || abort "could not read from '$tf'. aborting."
+        test -r "$tf" || abort "could not read from '$tf'."
         source "$tf"
     done
 
-    ${__err:=true} && exit $fail \
-                   || exit 0
+    ${__exit:=true} && exit $fail \
+                    || exit 0
 }
 
 tbd_main "$@"
