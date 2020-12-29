@@ -1,7 +1,0 @@
-#! /bin/sh
-
-
-trap 'echo got int.' INT
-trap 'echo got exit.' EXIT
-
-read
