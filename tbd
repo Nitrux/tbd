@@ -8,17 +8,17 @@ alias put='printf "%b"'      \
       trace="2> '${e_trace:="$(mktemp)"}' " \
       quiet="> /dev/null trace" \
       qev='quiet eval'          \
-      abort_on_error:='read __exit <<<'
+      ignore_errors:='read __exit <<<'
 
-r=$'\e[31m' g=$'\e[32m' i=$'\e[3m' n=$'\e[0m'
+eval $'r=\e[31m g=\e[32m i=\e[3m n=\e[0m'
+
+++ () { : $(( ++$1 )); }
 
 abort () {
     >&2 putln "\r${r}${1}${n}"
-    ${__exit:=true} && { put "$i"; sed "s|^|    |" "$e_trace"; put "$u"; exit ${err:-1}; } \
-                    || return ${err:-1}
+    ${__exit:=false} || { put "$i"; sed "s|^|    |" "$e_trace"; put "$u"; exit ${err:-1}; } \
+                     && return ${err:-1}
 }
-
-++ () { : $(( ++$1 )); }
 
 @ () { putln "${new_ln}\e[33m${*}${n}"; new_ln="\n"; }
 
@@ -48,7 +48,7 @@ tbd_main () {
         source "$tf"
     done
 
-    ${__exit:=true} && exit $fail \
+    ${__exit:=false} && exit $fail \
                     || exit 0
 }
 
