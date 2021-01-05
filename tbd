@@ -3,20 +3,18 @@
 
 shopt -s expand_aliases
 
-alias put='printf "%b"'      \
-      putln='printf "%b\n"'  \
-      trace="2> '${e_trace:="$(mktemp)"}' " \
+alias put='printf "%b"'         \
+      putln='printf "%b\n"'     \
       quiet="> /dev/null trace" \
-      qev='quiet eval'          \
-      ignore_errors:='read __exit <<<'
+      trace="2> '${err_trace:="$(mktemp)"}' " \
+      ignore_errors:='read __exit <<<' \
+      qev='quiet eval'
 
 eval $'r=\e[31m g=\e[32m i=\e[3m n=\e[0m'
 
-++ () { : $(( ++$1 )); }
-
 abort () {
     >&2 putln "\r${r}${1}${n}"
-    ${__exit:=false} || { put "$i"; sed "s|^|    |" "$e_trace"; put "$u"; exit ${err:-1}; } \
+    ${__exit:=false} || { put "$i"; sed "s|^|    |" "$err_trace"; put "$u"; exit ${err:-1}; } \
                      && return ${err:-1}
 }
 
@@ -33,14 +31,14 @@ abort () {
         ( * )  quiet "$2" "$1" "${@:3}";;
     esac
 
-    _c=$?; ++ tests
+    ((_c = $?, ++tests))
 
-    test $_c = 0 && { ++ good; putln "\r   ${g}ok${n}"; } \
-                 || { ++ fail; abort " fail"; }
+    test $_c = 0 && { ((++good)); putln "\r   ${g}ok${n}"; } \
+                 || { ((++fail)); abort " fail"; }
 }
 
 tbd_main () {
-    trap 'rm "$e_trace"; putln "" "  ${i}${tests:-0} tests executed, ${good:-0} passed, ${fail:-0} failed.${n}"' \
+    trap 'rm "$err_trace"; putln "" "  ${i}${tests:-0} tests executed, ${good:-0} passed, ${fail:-0} failed.${n}"' \
         EXIT
 
     for tf in "${@:-testfile}"; do
