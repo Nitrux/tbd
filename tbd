@@ -6,7 +6,7 @@ shopt -s expand_aliases
 alias put='printf "%b"'         \
       putln='printf "%b\n"'     \
       quiet="> /dev/null trace" \
-      trace="2> '${err_trace:="$(mktemp)"}' " \
+      trace="2> '${err_trace:=$(mktemp)}' " \
       ignore_errors:='read __exit <<<' \
       qev='quiet eval'
 
