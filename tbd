@@ -47,7 +47,7 @@ tbd_main () {
     done
 
     ${__exit:=false} && exit $fail \
-                    || exit 0
+                     || exit 0
 }
 
 tbd_main "$@"
