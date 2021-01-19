@@ -1,7 +1,2 @@
-@ "passing tests."
-    - "false" fails
-    - "true" works
-
-
-@ "test all in examples/."
+@ "-- mini test suite."
     - "./tbd examples/*" works

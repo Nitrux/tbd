@@ -1,53 +1,27 @@
 #! /bin/bash
 
+ignore_errors: () { __x=${1}; }
+tc () { 2> "${__et:=$(mktemp)}" "$@"; }
+qq () { > /dev/null tc "$@"; }
 
-shopt -s expand_aliases
+@ () { printf "\e[1m\n$*\e[0m\n"; }
 
-alias put='printf "%b"'         \
-      putln='printf "%b\n"'     \
-      quiet="> /dev/null trace" \
-      trace="2> '${err_trace:=$(mktemp)}' " \
-      ignore_errors:='read __exit <<<' \
-      qev='quiet eval'
-
-eval $'r=\e[31m g=\e[32m i=\e[3m n=\e[0m'
-
-abort () {
-    >&2 putln "\r${r}${1}${n}"
-    ${__exit:=false} || { put "$i"; sed "s|^|    |" "$err_trace"; put "$u"; exit ${err:-1}; } \
-                     && return ${err:-1}
-}
-
-@ () { putln "${new_ln}\e[33m${*}${n}"; new_ln="\n"; }
+::et () { sed "s|^|    > |" "$__et"; exit 1; }
+::no () { ((__no++)); printf "\r\e[31m  !!\e[0m\n"; ${__x:-false} || ::et; }
+::ok () { ((__ok++)); printf "\r\e[32m  ok\e[0m\n"; }
 
 - () {
-    put "       $*"
+    ((__tt++)); printf "%6s'${1}' ${*:2}"
 
-    case "$2" in
-        ( 'works' )   qev "$1";;
-        ( 'fails' )   qev ! "$1";;
-        ( 'prints' )  test "$(trace eval "$1")" = "$3";;
-
-        ( * )  quiet "$2" "$1" "${@:3}";;
-    esac
-
-    ((_c = $?, ++tests))
-
-    test $_c = 0 && { ((++good)); putln "\r   ${g}ok${n}"; } \
-                 || { ((++fail)); abort " fail"; }
+    case "$2" in ( works  )  qq eval "$1";;
+                 ( fails  )  qq eval "! $1";;
+                 ( prints )  test "$(tc eval "$1")" = "$3";;
+                 ( * )       qq "$2" "$1" "${@:3}";;
+    esac \
+        && ::ok || ::no
 }
 
-tbd_main () {
-    trap 'rm "$err_trace"; putln "" "  ${i}${tests:-0} tests executed, ${good:-0} passed, ${fail:-0} failed.${n}"' \
-        EXIT
+trap 'printf "\n\e[3m  ${__tt:-0} tests executed, ${__ok:-0} passed, ${__no:-0} failed.\e[0m\n\n"; rm "$__et"' \
+    EXIT
 
-    for tf in "${@:-testfile}"; do
-        test -r "$tf" || abort "could not read from '$tf'."
-        source "$tf"
-    done
-
-    ${__exit:=false} && exit $fail \
-                     || exit 0
-}
-
-tbd_main "$@"
+for _ in "${@:-testfile}"; do source "$_"; done
