@@ -1,2 +1,2 @@
-@ "-- mini test suite."
+@ "mini test suite."
     - "./tbd examples/*" works
