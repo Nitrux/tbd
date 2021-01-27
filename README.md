@@ -60,7 +60,7 @@ removes () {
 ```
 
 `-` will forward all its arguments, except for the second one (the command
-name). from the above example, `creates` will receive the following
+name). From the above example, `creates` will receive the following
 arguments: `>> a` and `a`; `removes` will receive `rm a` and `a`.
 
 A passing test must return `0`; otherwise, it will be considered a failure.
@@ -72,7 +72,7 @@ A passing test must return `0`; otherwise, it will be considered a failure.
   place your tests wherever you want and pass their paths to `tbd`,
   e.g.: `tbd tests/*`.
 
-- `-` supports these operands: `works`, `fails`, and `prints`. you might
+- `-` supports these operands: `works`, `fails`, and `prints`. You might
   guess what they do ;).
 
 - `tbd` exits as soon as an error raises in a `-` invocation.
