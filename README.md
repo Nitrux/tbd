@@ -2,39 +2,35 @@
 
 ![CI](https://github.com/luis-lavaire/tbd/workflows/CI/badge.svg)
 
-> _almost test-driven development; almost behavior-driven development._
+> _Almost test-driven development; almost behavior-driven development._
 
-## goals.
+## Goals.
 
-- simple tool to run tests.
-- simple yet powerful syntax.
-- almost flat learning curve.
-- works great with shell scripts.
+- Simple, yet powerful tool.
+- Almost flat learning curve.
+- Works great with shell scripts.
 
-## how to.
+## How to.
 
-- write your tests in `./testfile`.
-- run `tbd`.
+- Write your tests in `./testfile`.
+- Run `tbd`.
 
-### syntax.
+### Syntax.
 
 ```shell
-@ "test my code."  # '@' prints a message.
+@ "@ prints messages."
   - "echo yes" prints "yes"
   - "echo no" prints "no"
 
-on_error continue  # ignore errors.
-on_error abort     # exit on error (default).
-
 @ "break stuff"
-  - "false" fails  # the test is expected to fail: this works.
-  - "true" fails   # the test was expected to work: this one fails.
+  - "false" fails  # the test is expected to fail: the test passes.
+  - "true" fails   # the test was expected to work: the test fails.
 ```
 
 
-### custom tests.
+### Custom tests.
 
-you can define your own testing routines. you can either call an external
+You can define your own testing routines. You can either call an external
 program or define a function in the `testfile` (remember, `tbd` is embedded
 into `bash`, so you can use all of `bash`).
 
@@ -44,7 +40,7 @@ into `bash`, so you can use all of `bash`).
 - action test [results]
 ```
 
-whenever `test` is not any of `works`, `fails` or `prints`, `-` will try
+Whenever `test` is not one of: `works`, `fails` or `prints`, `-` will try
 to call it, e.g.:
 
 ```
@@ -63,24 +59,20 @@ removes () {
     - "rm a" removes "a"
 ```
 
-`-` will forward to the test all the arguments it received, except for the
-second one (the command name). from the above example, `creates` will receive
-the following arguments: `>> a` and `a`; `removes` will receive `rm a` and `a`.
+`-` will forward all its arguments, except for the second one (the command
+name). from the above example, `creates` will receive the following
+arguments: `>> a` and `a`; `removes` will receive `rm a` and `a`.
 
-a passing test must return `0`, otherwise it will be considered a failure.
+A passing test must return `0`; otherwise, it will be considered a failure.
 
 
-## notes.
+## Notes.
 
-- by default, `tbd` will try to read from `./testfile`, but you can
+- By default, `tbd` will try to read from `./testfile`, but you can
   place your tests wherever you want and pass their paths to `tbd`,
   e.g.: `tbd tests/*`.
 
 - `-` supports these operands: `works`, `fails`, and `prints`. you might
-  guess what they do.
+  guess what they do ;).
 
-- by default, `tbd` will exit as soon as an error raises. you can
-  override that behavior by writing `on_error continue` into the test file.
-  note that it will be evaluated when it appears, not before running the
-  tests. to revert to the default behavior, use `on_error quit` or
-  `on_error abort`.
+- `tbd` exits as soon as an error raises in a `-` invocation.
