@@ -21,4 +21,4 @@ shopt -s expand_aliases; alias null='> /dev/null 2> "${__err_t:=$(mktemp)}" ' \
 trap 'rm -f "$__err_t"; printf "\n\e[3m  ${__tt:-0} tests, ${__ok:-0} ok, ${__no:-0} failed.\e[0m\n\n"' \
       EXIT
 
-for _ in "${@:-testfile}"; do trace source "$_"; done
+for _ in "${@:-testfile}"; do source "$_"; done
