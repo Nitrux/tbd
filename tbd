@@ -4,10 +4,14 @@ shopt -s expand_aliases; alias null='> /dev/null 2> "${__err_t:=$(mktemp)}" ' \
                                trace='2> "${__err_t:=$(mktemp)}" ' \
                                status='printf "\r\e[%sm %s\e[m\n"'
 
-@ () { printf "\n\e[1m-- ${*}\e[m\n"; }
+trap 'rm -f "$__err_t"; printf "\n\e[3m  ${__tt:-0} tests, ${__ok:-0} passed, ${__no:-0} failed.\e[m\n\n"' \
+      EXIT
+
+
+@ () { printf "\n\e[1;33m-- ${*}\e[m\n"; }
 
 - () {
-    ((__tt++)); printf "%4s'${1}' ${*:2}"
+    ((__tt++)); printf "%4s${1} \e[34m${2} \e[m${*:3}"
 
     case "$2" in ( works  )  null eval "$1";;
                  ( fails  )  null eval "! $1";;
@@ -17,8 +21,5 @@ shopt -s expand_aliases; alias null='> /dev/null 2> "${__err_t:=$(mktemp)}" ' \
     case $? in ( 0 )  ((__ok++)); status 32 "ok";;
                ( * )  ((__no++)); status 31 "!!"; sed 's/^/    | /' "$__err_t"; exit 1;; esac
 }
-
-trap 'rm -f "$__err_t"; printf "\n\e[3m  ${__tt:-0} tests, ${__ok:-0} passed, ${__no:-0} failed.\e[m\n\n"' \
-      EXIT
 
 for _ in "${@:-testfile}"; do source "$_"; done
