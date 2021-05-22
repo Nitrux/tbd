@@ -1,3 +1,0 @@
-@ "mktemp."
-    - "rm $(mktemp)" works
-    - "mktemp bad-template" fails

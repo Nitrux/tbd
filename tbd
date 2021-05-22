@@ -1,25 +1,40 @@
 #! /bin/bash
 
-shopt -s expand_aliases; alias null='> /dev/null 2> "${__err_t:=$(mktemp)}" ' \
-                               trace='2> "${__err_t:=$(mktemp)}" ' \
-                               status='printf "\r\e[%sm %s\e[m\n"'
 
-trap 'rm -f "$__err_t"; printf "\n\e[3m  ${__tt:-0} tests, ${__ok:-0} passed, ${__no:-0} failed.\e[m\n\n"' \
-      EXIT
+# By default, bash doesn't expand aliases in scripts.
+    shopt -s expand_aliases
 
 
-@ () { printf "\n\e[1;33m-- ${*}\e[m\n"; }
+# Save error traces to this file, and remove it at the end.
+
+    trap "rm -f '${__std_err:=$(mktemp)}'" EXIT
+
+
+# __tbd_eval:   Save the error trace (if any), and discard stdout.
+# __tbd_prints: Redirect stderr to __std_err, but leave stdout untouched.
+
+    alias __tbd_eval='> /dev/null 2> "${__std_err}" eval ' \
+          __tbd_prints='2> "${__std_err}" eval ' \
+          printf="$(which printf)"  # avoid using a builtin.
+
+# Print a message. Intended to describe the tests that follow.
+
+    @ () { printf "\n\e[30;103m %s \e[m\n" "${*}"; }
+
+
+# Execute a test.
 
 - () {
-    ((__tt++)); printf "%4s${1} \e[34m${2} \e[m${*:3}"
+    printf '     %44.44s %b' "${1}" "\e[95m${2}\e[m ${*:3}"
 
-    case "$2" in ( works  )  null eval "$1";;
-                 ( fails  )  null eval "! $1";;
-                 ( prints )  test "$(trace eval "$1")" = "$3";;
-                 ( * )       null "$2" "$1" "${@:3}";; esac
+    case "$2" in ( works  ) __tbd_eval "$1";;
+                 ( fails  ) __tbd_eval "! $1";;
+                 ( prints ) test "$(__tbd_prints "$1")" = "$3";;
+                 ( *      ) printf "  \e[101mUnknown directive '${2}'.\e[m"; exit 2;; esac
 
-    case $? in ( 0 )  ((__ok++)); status 32 "ok";;
-               ( * )  ((__no++)); status 31 "!!"; sed 's/^/    | /' "$__err_t"; exit 1;; esac
+    case $? in ( 0 ) printf "\r \e[92m%s\e[m\n" "ok";;
+               ( * ) printf "\r \e[3;91m%s\e[m\n\n" "!!"
+                     awk '{print "\t", $0}' "$__std_err"; exit 1;; esac
 }
 
-for _ in "${@:-testfile}"; do source "$_"; done
+for f in "${@-./testfile}"; do source "./$f"; done

@@ -1,2 +1,30 @@
-@ "mini test suite."
-    - "./tbd examples/*" works
+@ "echo"
+    - "echo" works
+    - "echo good" prints "good"
+    - "echoes" fails
+    - "echo 'all is well'" prints "all is well"
+
+@ "mktemp"
+    - "rm $(mktemp)" works
+    - "mktemp bad-template" fails
+
+@ "sh"
+    - "sh -c 'cd $HOME; echo $PWD'" works
+    - "sh -c 'exit 1'" fails
+
+@ "test"
+    - "test ''" fails
+    - "test '.'" works
+    - "test -d /" works
+    - "test -e ./" works
+    - "test -e '$HOME'" works
+    - "test 2 = 2" works
+    - "test 2 -lt 1" fails
+    - "test 1 -le 1" works
+    - "test 2 -gt 1" works
+    - "test 3 -ge 1" works
+
+@ "other"
+    - "> file" works
+    - "rm file" works
+    - "< no" fails
