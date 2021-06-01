@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/luis-lavaire/tbd/workflows/CI/badge.svg)
 
-> _Test your bash scripts._
+> _Test your programs (or scripts)._
 
 ## Goals.
 
@@ -27,7 +27,7 @@
 `-` has the following syntax:
 
 ```shell
-- <cmd> <works|fails|prints> [text]
+- <cmd [args]> <works|fails|prints> [text]
 ```
 
 This is how a real `testfile` could look like:
@@ -43,4 +43,3 @@ This is how a real `testfile` could look like:
   - "false" fails  # A failure was expected: The test passes.
   - "true" fails   # A failure was expected: The test fails.
 ```
-
