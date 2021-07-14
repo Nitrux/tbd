@@ -1,40 +1,13 @@
 #! /bin/bash
 
+#   You know what this is.
+    @ () { echo -e "${nl}\e[45;30m $* \e[m"; nl='\n'; }
+    _ () { echo -e "$*"; }
 
-# By default, bash doesn't expand aliases in scripts.
-    shopt -s expand_aliases
+#   Augmenters.
+    + () { _ "\e[34m  works\e[m  $*"; eval "$@" > /dev/null || exit; }
+    - () { _ "\e[34m  fails\e[m  $*"; eval "$@" > /dev/null 2>&1 && exit 1; exit 0; }
 
-
-# Save error traces to this file, and remove it at the end.
-
-    trap "rm -f '${__std_err:=$(mktemp)}'" EXIT
-
-
-# __tbd_eval:   Save the error trace (if any), and discard stdout.
-# __tbd_prints: Redirect stderr to __std_err, but leave stdout untouched.
-
-    alias __tbd_eval='> /dev/null 2> "${__std_err}" eval ' \
-          __tbd_prints='2> "${__std_err}" eval ' \
-          printf="$(which printf)"  # avoid using a builtin.
-
-# Print a message. Intended to describe the tests that follow.
-
-    @ () { printf "\n\e[30;103m %s \e[m\n" "${*}"; }
-
-
-# Execute a test.
-
-- () {
-    printf '     %44.44s %b' "${1}" "\e[95m${2}\e[m ${*:3}"
-
-    case "$2" in ( works  ) __tbd_eval "$1";;
-                 ( fails  ) __tbd_eval "! $1";;
-                 ( prints ) test "$(__tbd_prints "$1")" = "$3";;
-                 ( *      ) printf "  \e[101mUnknown directive '${2}'.\e[m"; exit 2;; esac
-
-    case $? in ( 0 ) printf "\r \e[92m%s\e[m\n" "ok";;
-               ( * ) printf "\r \e[3;91m%s\e[m\n\n" "!!"
-                     awk '{print "\t", $0}' "$__std_err"; exit 1;; esac
-}
-
-for f in "${@-./testfile}"; do source "./$f"; done
+#   Do your thing.
+    trap '_ "\n\e[3;4${?//[1-9]/1}m  ==> $?  \e[m\n"' EXIT
+    source ./testfile

@@ -1,30 +1,21 @@
-@ "echo"
-    - "echo" works
-    - "echo good" prints "good"
-    - "echoes" fails
-    - "echo 'all is well'" prints "all is well"
+@ echo
+    + echo
+    + echo good
 
-@ "mktemp"
-    - "rm $(mktemp)" works
-    - "mktemp bad-template" fails
+@ sh
+    + sh -c 'set a b c d; for x; do echo $x; done'
+    + sh -c 'cd $HOME; echo $PWD'
 
-@ "sh"
-    - "sh -c 'cd $HOME; echo $PWD'" works
-    - "sh -c 'exit 1'" fails
+@ test
+    + test .
+    + test -d /
+    + test -e .
+    + test -e "$HOME"
+    + test 2 = 2
+    + test 1 -le 1
+    + test 2 -gt 1
 
-@ "test"
-    - "test ''" fails
-    - "test '.'" works
-    - "test -d /" works
-    - "test -e ./" works
-    - "test -e '$HOME'" works
-    - "test 2 = 2" works
-    - "test 2 -lt 1" fails
-    - "test 1 -le 1" works
-    - "test 2 -gt 1" works
-    - "test 3 -ge 1" works
-
-@ "other"
-    - "> file" works
-    - "rm file" works
-    - "< no" fails
+@ other
+    + \> file
+    + rm file
+    - \< no
