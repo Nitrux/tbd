@@ -1,45 +1,33 @@
 # tbd
 
-![CI](https://github.com/luis-lavaire/tbd/workflows/CI/badge.svg)
+![CI](https://github.com/luislavaire/tbd/workflows/CI/badge.svg)
 
 > _Test your programs (or scripts)._
 
 ## Goals.
 
 - Simple, yet useful.
-- Almost flat learning curve (just two functions: `@` and `-`).
-
-## How to.
-
-- Write your tests in `./testfile` (or pass them to `tbd` through the commandline).
-- Run `tbd`.
+- Almost flat learning curve (just three functions: `@`, `+` and `-`).
 
 ### Syntax.
 
-`tbd` was designed with a very lightweight syntax. It only adds two commands.
+`tbd` was designed with a very lightweight syntax in mind. It only has three commands.
 
-`@` has the following syntax:
-
-```shell
-@ [message [message...]]
 ```
-
-`-` has the following syntax:
-
-```shell
-- <cmd [args]> <works|fails|prints> [text]
+@ [message]     # Print a message.
++ <cmd> [args]  # Run a test that is expected to pass (exit with code 0).
+- <cmd> [args]  # Run a test that is expected to fail (exit with code >0).
 ```
 
 This is how a real `testfile` could look like:
 
 ```shell
-@ "test echo"
-  - "echo yes" prints "yes"
-  - "echo no" prints "no"
-  - "echo" works
-
-@ "other tests"
-  - "true" works   # Command exits with exit code 0: The test passes.
-  - "false" fails  # A failure was expected: The test passes.
-  - "true" fails   # A failure was expected: The test fails.
+@ Test tbd.
+  + true
+  - false
 ```
+
+## How to.
+
+- Write your tests in `./testfile`.
+- Run `tbd`.
