@@ -1,12 +1,12 @@
 #! /bin/bash
 
 #   You know what this is.
-    @  () { printf "${nl}\e[45;30m ${*} \e[m\n"; nl='\n'; }
-    -  () { "$2" "$1"; }
+    @ () { printf "${nl}\e[45;30m ${*} \e[m\n"; nl='\n'; }
+    - () { "$2" "$1"; }
 
 #   Augmenters.
-    works () { eval "$@" > /dev/null || exit; printf "\e[34m  works\e[m  ${*}\n"; }
-    fails () { eval "$@" > /dev/null 2>&1 && exit 1; printf "\e[34m  fails\e[m  ${*}\n"; }
+    works () { eval "$@" > /dev/null || exit; printf "\e[34m  works \e[m ${*}\n"; }
+    fails () { eval "$@" > /dev/null 2>&1 && exit 1; printf "\e[34m  fails \e[m ${*}\n"; }
 
 #   Do your thing.
     trap 'printf "\n\e[3m $_ \e[m => $?\n\n"' EXIT; source ./testfile
