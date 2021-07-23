@@ -1,13 +1,12 @@
 #! /bin/bash
 
 #   You know what this is.
-    @ () { echo -e "${nl}\e[45;30m $* \e[m"; nl='\n'; }
-    _ () { echo -e "$*"; }
+    @  () { printf "${nl}\e[45;30m ${*} \e[m\n"; nl='\n'; }
+    -  () { "$2" "$1"; }
 
 #   Augmenters.
-    + () { _ "\e[34m  works\e[m  $*"; eval "$@" > /dev/null || exit; }
-    - () { _ "\e[34m  fails\e[m  $*"; eval "$@" > /dev/null 2>&1 && exit 1; exit 0; }
+    works () { eval "$@" > /dev/null || exit; printf "\e[34m  works\e[m  ${*}\n"; }
+    fails () { eval "$@" > /dev/null 2>&1 && exit 1; printf "\e[34m  fails\e[m  ${*}\n"; }
 
 #   Do your thing.
-    trap '_ "\n\e[3;4${?//[1-9]/1}m  ==> $?  \e[m\n"' EXIT
-    source ./testfile
+    trap 'printf "\n\e[3m $_ \e[m => $?\n\n"' EXIT; source ./testfile

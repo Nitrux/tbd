@@ -1,3 +1,4 @@
 @ Test tbd.
-    + true
-    - false
+    - "true" works
+    - "false" fails
+    - "echo good, good; false" works
