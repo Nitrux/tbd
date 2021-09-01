@@ -7,27 +7,27 @@
 ## Goals.
 
 - Simple, yet useful.
-- Almost flat learning curve (just three functions: `@`, `+` and `-`).
+- Almost flat learning curve (it's just two functions: `@` and `-`).
 
 ### Syntax.
 
-`tbd` was designed with a very lightweight syntax in mind. It only has two commands.
+`tbd` was designed with a very lightweight syntax in mind.
+It only has two commands: `@` to print messages (headers), and `-` to run a test.
 
 ```
 @ [message]             # Print a message to the screen.
-- "<cmd> [args]" works  # Run a test that is expected to exit with code 0.
-- "<cmd> [args]" fails  # Run a test that is expected to exit with code greater than 0.
+- '<cmd> [args]' works  # Run a test that exits 0.
+- '<cmd> [args]' fails  # Run a test that exits greater than 0.
 ```
 
 This is how a real `testfile` could look like:
 
 ```shell
 @ Test something.
-  - true works
-  - false fails
+  - 'true'  works
+  - 'false' fails
 ```
 
 ## How to.
 
-- Write your tests in `./testfile`.
-- Run `tbd` in the same directory where your `testfile` is.
+Write your tests in a file called `testfile` and run `tbd` in the same directory where your `testfile` is.

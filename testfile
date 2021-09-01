@@ -1,4 +1,4 @@
 @ Test tbd.
-    - "true" works
-    - "false" fails
-    - 'echo "hi"' prints "hi"
+    - 'true' works
+    - 'false' fails
+    - 'echo "hi"' prints 'hi'
