@@ -1,7 +1,5 @@
 # tbd
 
-![CI](https://github.com/luislavaire/tbd/workflows/CI/badge.svg)
-
 > _Test your programs._
 
 ## Goals.
