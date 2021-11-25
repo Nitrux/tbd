@@ -1,13 +1,7 @@
 #! /bin/bash
 
-#   You know what this is.
-    @ () { printf "${nl}\e[45;30m $* \e[m\n"; nl='\n'; }
-    - () { "$2" "$1" ${3:+"$3"}; }
 
-#   Augmenters.
-    works () { eval "$*" > /dev/null || exit 1;         printf "\e[34m  works  \e[m $*\n"; }
-    fails () { eval "$*" > /dev/null && exit 1;         printf "\e[34m  fails  \e[m $*\n"; }
-    prints () { test "$(eval "$1")" = "$2" || exit 1;   printf "\e[34m  prints \e[m $1 => $2\n"; }
+- () { echo "- $*"; eval "$*" > /dev/null 2>&1; }
 
-#   Do your thing.
-    source ./testfile
+trap 'echo -e "\e[31m Test failed. {\$? = $?}\e[m"; ${TBD_ERREXIT:+exit}' ERR
+source ./testfile

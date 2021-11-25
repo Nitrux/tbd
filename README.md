@@ -2,30 +2,31 @@
 
 > _Test your programs._
 
-## Goals.
+A simple program for testing programs. It exposes a minimal
+syntax. It runs atop `bash`, so you can use all of it.
 
-- Simple, yet useful.
-- Almost flat learning curve (it's just two functions: `@` and `-`).
+## Usage.
 
-### Syntax.
+Write your tests in a file called `testfile` and run `tbd` in
+the same directory where your `testfile` is.
 
-`tbd` was designed with a very lightweight syntax in mind.
-It only has two commands: `@` to print messages (headers), and `-` to run a test.
+`tbd` exports just one function: `-`, which runs a test:
 
 ```
-@ [message]             # Print a message to the screen.
-- '<cmd> [args]' works  # Run a test that exits 0.
-- '<cmd> [args]' fails  # Run a test that exits greater than 0.
+- '<cmd> [args]'
 ```
+
+By default, `tbd` will continue running tests if it finds an error.
+However, if you'd like it to abort on error, just set `TBD_ERREXIT`
+to any non-empty value.
 
 This is how a real `testfile` could look like:
 
 ```shell
-@ Test something.
-  - 'true'  works
-  - 'false' fails
+- 'echo "Hi there!"'
+- 'false'       # This will not abort the test suite.
+
+TBD_ERREXIT=1   # Errors will now result on abortion.
+- 'false'       # tbd exits.
+- 'echo "This will not be printed."'
 ```
-
-## How to.
-
-Write your tests in a file called `testfile` and run `tbd` in the same directory where your `testfile` is.
