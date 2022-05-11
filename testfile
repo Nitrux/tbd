@@ -1,4 +1,5 @@
-- 'true'
-- 'false'
-- 'return 4'
-- 'echo okay'
+- true
+- false
+- return 4
+- echo okay
+- echo "your home is at $HOME."

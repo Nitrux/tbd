@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-- () { echo "- $*"; eval "$*" > /dev/null 2>&1; }
+- () { echo "- $*"; eval "$*" > /dev/null; }
 
-trap 'echo -e "\e[31m Test failed. {\$? = $?}\e[m"; ${TBD_ERREXIT:+exit}' ERR
+trap 'echo -e "\e[31m ^ failed (\$? = $?).\e[m"; ${TBD_ERREXIT:+exit}' ERR
 source ./testfile
