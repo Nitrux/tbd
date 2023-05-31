@@ -3,5 +3,5 @@
 
 - () { echo "- $*"; eval "$*" > /dev/null; }
 
-trap 'echo -e "\e[31m ^ failed (\$? = $?).\e[m"; ${TBD_ERREXIT:+exit}' ERR
+trap 'echo -e "\e[31m ^ fail (\$? = $?).\e[m"; ${TBD_ERREXIT:+exit}' ERR
 source ./testfile
